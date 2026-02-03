@@ -261,13 +261,14 @@ document.getElementById("snakeForm").addEventListener("submit", function (e) {
     if (!w) return false;
     return isInFeedRange(feedMin, feedMax, w.min, w.max);
   });
+const recommendedProducts = matchedProducts.slice(0, 3);
 
-  if (matchedProducts.length === 0) {
+if (recommendedProducts.length === 0) {
     resultDiv.innerHTML += "<p>적합한 상품이 없습니다.</p>";
     return;
   }
 
-  matchedProducts.forEach(p => {
+recommendedProducts.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
     div.innerHTML = `
