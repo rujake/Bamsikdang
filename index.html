@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>뱀 먹이 추천</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input, select, button {
+      padding: 6px;
+      margin-right: 6px;
+    }
+    .product {
+      margin-top: 8px;
+    }
+    .product {
+  display: inline-block;
+  margin: 10px;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  text-decoration: none;
+  color: white;
+}
+
+.product-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.product-title {
+  margin-top: 6px;
+  font-size: 0.9em;
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+ <body style="background-color:#004288;">
+<h1><p style="color:white;">MENU</p></h1>
+
+<form id="snakeForm">
+  <input
+    type="number"
+    id="weightInput"
+    placeholder="무게 입력"
+    min="0"
+    step="any"
+    required
+  >
+
+  <select id="unitSelect">
+    <option value="g">그램</option>
+    <option value="kg">킬로그램</option>
+  </select>
+<br>
+  <button type="submit", button style="padding: 5px 30px 5px 30px; font-size: 1em;">추천 상품 검색</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+/* =========================
+   PRODUCT DATA (MANUAL)
+   ========================= */
+const PRODUCTS = [
+  {
+    title: "냉동마우스 갓핑키 1g [진공포장] 뱀식당 먹이용쥐 뱀먹이 냉동쥐",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856309123",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "냉동마우스 핑키 2-4g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856321526",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "냉동마우스 퍼지 5-7g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856329041",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "냉동마우스 하퍼 8-11g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856309123",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "냉동마우스 소 12-16g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856336097",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동마우스 중 17-21g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856339891",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동마우스 대 22-27g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856342336",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동마우스 특대 28-39g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856309123",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동마우스 왕특대 40-55g",
+    category: "마우스",
+    link: "https://smartstore.naver.com/bamsikdang/products/4856309123",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 갓핑키 6-9g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/8619213164",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 핑키 10-15g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5344307360",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 퍼지 20-30g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419936079",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "냉동래-트 하퍼 35-50g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419940119",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 하퍼 특 55-70g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419941352",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 소 80-100g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419942888",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 소 특 101-120g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419945523",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 중 130-180g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419948224",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 대 190-280g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419949071",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 특대 290-380g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419949573",
+    image: "https://picsum.photos/536/354"
+  },
+{
+    title: "냉동래-트 왕특대 390-600g",
+    category: "래-트",
+    link: "https://smartstore.naver.com/bamsikdang/products/5419950048",
+    image: "https://picsum.photos/536/354"
+  },
+  {
+    title: "사이드메뉴 10-15g",
+    category: "사이드메뉴",
+    link: "https://smartstore.naver.com/bamsikdang",
+    image: "https://picsum.photos/536/354"
+  }
+];
+
+/* =========================
+   HELPER FUNCTIONS
+   ========================= */
+function extractWeight(title) {
+  const numbers = title.match(/\d+/g);
+  if (!numbers) return null;
+
+  const min = Number(numbers[0]);
+  const max = numbers.length > 1 ? Number(numbers[1]) : min;
+
+  return { min, max };
+}
+
+function isInFeedRange(feedMin, feedMax, itemMin, itemMax) {
+  const singleMatch =
+    itemMin <= feedMax && itemMax >= feedMin;
+
+  const doubleMatch =
+    itemMin * 2 <= feedMax && itemMax * 2 >= feedMin;
+
+  return singleMatch || doubleMatch;
+}
+
+/* =========================
+   FORM SUBMIT
+   ========================= */
+document.getElementById("snakeForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const weight = Number(document.getElementById("weightInput").value);
+  const unit = document.getElementById("unitSelect").value;
+  const resultDiv = document.getElementById("result");
+
+  resultDiv.innerHTML = "";
+
+  if (weight <= 0) {
+    alert("무게를 올바르게 입력하세요.");
+    return;
+  }
+
+  // Convert to grams
+  const gramWeight = unit === "kg" ? weight * 1000 : weight;
+
+  // Feed range (IMPORTANT: multiply by 0.1 and 0.15)
+  const feedMin = gramWeight * 0.1;
+  const feedMax = gramWeight * 0.15;
+
+  resultDiv.innerHTML += `
+    <p>
+      <p style="color:white;">급여 범위</p>
+      <p style="color:white;">: <strong>${feedMin.toFixed(1)}g ~ ${feedMax.toFixed(1)}g</strong></p>
+    </p>
+    <h3><p style="color:white;">추천 먹이</p></h3>
+  `;
+
+  const matchedProducts = PRODUCTS.filter(p => {
+    const w = extractWeight(p.title);
+    if (!w) return false;
+    return isInFeedRange(feedMin, feedMax, w.min, w.max);
+  });
+
+  if (matchedProducts.length === 0) {
+    resultDiv.innerHTML += "<p>적합한 상품이 없습니다.</p>";
+    return;
+  }
+
+  matchedProducts.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+     <a href="${p.link}" target="_blank" class="product-card">
+    <img src="${p.image}" alt="${p.title}">
+    <div class="product-title">
+      ${p.title}
+    </div>
+  </a>
+`;
+    resultDiv.appendChild(div);
+  });
+});
+</script>
+
+</body>
+</html>
+
